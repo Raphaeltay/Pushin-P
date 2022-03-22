@@ -96,6 +96,8 @@ FW_boost_pred<-ifelse(predict(FW_boost, FWtst, n.trees = 5000, "response")>0.5, 
 table(predicted = FW_boost_pred, actual = FWtst$Tournament)
 FWboost_acc<- calc_acc(predicted = FW_boost_pred, actual = FWtst$Tournament)
 FWboost_acc
+#Neural Networks
+
 
 #FWMF 2020
 FWMF.20<-dat.20 %>% filter(Pos == "FWMF") %>% select(8:72, Tournament, In.Out) %>% filter(In.Out == "Yes")
@@ -169,6 +171,8 @@ rf_grid =  expand.grid(mtry = 1:100)
 FWMFrf_tune <- train(as.factor(Tournament) ~ ., data = na.omit(FWMFboth), method = "rf", trControl = oob, verbose = FALSE, tuneGrid = rf_grid)
 FWMF_bag<-randomForest(as.factor(Tournament)~., data = na.omit(FWMFboth), mtry = as.numeric(FWMFrf_tune$bestTune), importance = T, ntrees = 500)
 FWMF_bag
+FWMF_rf<-randomForest(as.factor(Tournament)~., data = na.omit(FWMFboth), mtry = as.numeric(FWMFrf_tune$bestTune), importance = T, ntrees = 500)
+FWMF_rf
 #Gradient Boosting Model
 FWMF_boost<-gbm(ifelse(Tournament == "Yes", 1, 0)~., data = FWMFboth, distribution = "bernoulli", n.trees = 5000, interaction.depth = 4, shrinkage = 0.01)
 FWMF_boost
@@ -243,6 +247,7 @@ FWDFtree_acc.b
 #Bagging
 library(randomForest)
 library(gbm)
+
 library(ISLR)
 library(Rcpp)
 #Tuning
@@ -253,6 +258,8 @@ rf_grid =  expand.grid(mtry = 1:100)
 FWDFrf_tune <- train(as.factor(Tournament) ~ ., data = na.omit(FWDFboth), method = "rf", trControl = oob, verbose = FALSE, tuneGrid = rf_grid)
 FWDF_bag<-randomForest(as.factor(Tournament)~., data = na.omit(FWDFboth), mtry = as.numeric(FWDFrf_tune$bestTune), importance = T, ntrees = 500)
 FWDF_bag
+FWDF_rf<-randomForest(as.factor(Tournament)~., data = na.omit(FWDFboth), mtry = as.numeric(FWDFrf_tune$bestTune), importance = T, ntrees = 500)
+FWDF_rf
 #Gradient Boosting Model
 FWDF_boost<-gbm(ifelse(Tournament == "Yes", 1, 0)~.-In.Out, data = FWDFboth, distribution = "bernoulli", n.trees = 5000, interaction.depth = 4, shrinkage = 0.01)
 FWDF_boost
@@ -260,6 +267,9 @@ FWDF_boost_pred<-ifelse(predict(FWDF_boost, FWDFtst, n.trees = 5000, "response")
 table(predicted = FWDF_boost_pred, actual = FWDFtst$Tournament)
 FWDFboost_acc<- calc_acc(predicted = FWDF_boost_pred, actual = FWDFtst$Tournament)
 FWDFboost_acc
+#Neural Networks
+
+
 
 #DFFW 2020
 DFFW.20<-dat.20 %>% filter(Pos == "DFFW") %>% select(8:72, Tournament, In.Out) %>% filter(In.Out == "Yes")
@@ -337,6 +347,8 @@ rf_grid =  expand.grid(mtry = 1:100)
 DFFWrf_tune <- train(as.factor(Tournament) ~ ., data = na.omit(DFFWboth), method = "rf", trControl = oob, verbose = FALSE, tuneGrid = rf_grid)
 DFFW_bag<-randomForest(as.factor(Tournament)~., data = na.omit(DFFWboth), mtry = as.numeric(DFFWrf_tune$bestTune), importance = T, ntrees = 500)
 DFFW_bag
+DFFW_rf<-randomForest(as.factor(Tournament)~., data = na.omit(DFFWboth), mtry = as.numeric(DFFWrf_tune$bestTune), importance = T, ntrees = 500)
+DFFW_rf
 #Gradient Boosting Model
 DFFW_boost<-gbm(ifelse(Tournament == "Yes", 1, 0)~.-In.Out, data = DFFWboth, distribution = "bernoulli", n.trees = 5000, interaction.depth = 4, shrinkage = 0.01)
 DFFW_boost
@@ -344,6 +356,9 @@ DFFW_boost_pred<-ifelse(predict(DFFW_boost, DFFWtst, n.trees = 5000, "response")
 table(predicted = DFFW_boost_pred, actual = DFFWtst$Tournament)
 DFFWboost_acc<- calc_acc(predicted = DFFW_boost_pred, actual = DFFWtst$Tournament)
 DFFWboost_acc
+#Neural Networks
+
+
 
 #DFMF 2020
 DFMF.20<-dat.20 %>% filter(Pos == "DFMF") %>% select(8:72, Tournament, In.Out) %>% filter(In.Out == "Yes")
@@ -423,6 +438,8 @@ DFMFrf_tune <- train(as.factor(Tournament) ~ ., data = na.omit(DFMFboth), method
 DFMFgbm_tune <- train(Tournament ~ ., data = na.omit(DFMFboth),method = "gbm",trControl = cv_5, verbose = T, tuneGrid = gbm_grid)
 DFMF_bag<-randomForest(as.factor(Tournament)~., data = na.omit(DFMFboth), mtry = as.numeric(DFMFrf_tune$bestTune), importance = T, ntrees = 500)
 DFMF_bag
+DFMF_rf<-randomForest(as.factor(Tournament)~., data = na.omit(DFMFboth), mtry = as.numeric(DFMFrf_tune$bestTune), importance = T, ntrees = 500)
+DFMF_rf
 #Gradient Boosting Model
 DFMF_boost<-gbm(ifelse(Tournament == "Yes", 1, 0)~.-In.Out, data = DFMFboth, distribution = "bernoulli", n.trees = 5000, interaction.depth = 4, shrinkage = 0.01)
 DFMF_boost
@@ -511,6 +528,8 @@ rf_grid =  expand.grid(mtry = 1:100)
 DFrf_tune <- train(as.factor(Tournament) ~ ., data = na.omit(DFboth), method = "rf", trControl = oob, verbose = FALSE, tuneGrid = rf_grid)
 DF_bag<-randomForest(as.factor(Tournament)~., data = na.omit(DFboth), mtry = as.numeric(DFrf_tune$bestTune), importance = T, ntrees = 500)
 DF_bag
+DF_rf<-randomForest(as.factor(Tournament)~., data = na.omit(DFboth), mtry = as.numeric(DFrf_tune$bestTune), importance = T, ntrees = 500)
+DF_rf
 #Gradient Boosting Model
 DF_boost<-gbm(ifelse(Tournament == "Yes", 1, 0)~.-In.Out, data = DFboth, distribution = "bernoulli", n.trees = 5000, interaction.depth = 4, shrinkage = 0.01)
 DF_boost
@@ -598,6 +617,8 @@ rf_grid =  expand.grid(mtry = 1:100)
 MFrf_tune <- train(as.factor(Tournament) ~ ., data = na.omit(MFboth), method = "rf", trControl = oob, verbose = FALSE, tuneGrid = rf_grid)
 MF_bag<-randomForest(as.factor(Tournament)~., data = na.omit(MFboth), mtry = as.numeric(MFrf_tune$bestTune), importance = T, ntrees = 500)
 MF_bag
+MF_rf<-randomForest(as.factor(Tournament)~., data = na.omit(MFboth), mtry = as.numeric(MFrf_tune$bestTune), importance = T, ntrees = 500)
+MF_rf
 #Gradient Boosting Model
 MF_boost<-gbm(ifelse(Tournament == "Yes", 1, 0)~.-In.Out, data = MFboth, distribution = "bernoulli", n.trees = 5000, interaction.depth = 4, shrinkage = 0.01)
 MF_boost
@@ -685,6 +706,8 @@ rf_grid =  expand.grid(mtry = 1:100)
 MFFWrf_tune <- train(as.factor(Tournament) ~ ., data = na.omit(MFFWboth), method = "rf", trControl = oob, verbose = FALSE, tuneGrid = rf_grid)
 MFFW_bag<-randomForest(as.factor(Tournament)~., data = na.omit(MFFWboth), mtry = as.numeric(MFFWrf_tune$bestTune), importance = T, ntrees = 500)
 MFFW_bag
+MFFW_rf<-randomForest(as.factor(Tournament)~., data = na.omit(MFFWboth), mtry = as.numeric(MFFWrf_tune$bestTune), importance = T, ntrees = 500)
+MFFW_rf
 #Gradient Boosting Model
 MFFW_boost<-gbm(ifelse(Tournament == "Yes", 1, 0)~., data = MFFWboth, distribution = "bernoulli", n.trees = 5000, interaction.depth = 4, shrinkage = 0.01)
 MFFW_boost
@@ -771,6 +794,8 @@ rf_grid =  expand.grid(mtry = 1:100)
 MFDFrf_tune <- train(as.factor(Tournament) ~ ., data = na.omit(MFDFboth), method = "rf", trControl = oob, verbose = FALSE, tuneGrid = rf_grid)
 MFDF_bag<-randomForest(as.factor(Tournament)~., data = na.omit(MFDFboth), mtry = as.numeric(MFDFrf_tune$bestTune), importance = T, ntrees = 500)
 MFDF_bag
+MFDF_rf<-randomForest(as.factor(Tournament)~., data = na.omit(MFDFboth), mtry = as.numeric(MFDFrf_tune$bestTune), importance = T, ntrees = 500)
+MFDF_rf
 #Gradient Boosting Model
 MFDF_boost<-gbm(ifelse(Tournament == "Yes", 1, 0)~.-In.Out, data = MFDFboth, distribution = "bernoulli", n.trees = 5000, interaction.depth = 4, shrinkage = 0.01)
 MFDF_boost
@@ -799,21 +824,19 @@ calc_acc = function(actual, predicted) {
 
 #Splitting into test and training dataset
 set.seed(123)
-idx<-sample(2,nrow(GK.20),replace = T, prob = c(0.8,0.2))
-GKtrn<-GK.20[idx==1,]
-GKtst<-GK.20[idx==2,]
+Gk.20<-GK.20 %>% select(1:6,8:9,13:17,18:84, Tournament)
+idx<-sample(2,nrow(Gk.20),replace = T, prob = c(0.8,0.2))
+GKtrn<-Gk.20[idx==1,]
+GKtst<-Gk.20[idx==2,]
 table(GKtrn$Tournament)
 #Balancing Data
 library(ROSE)
-GKover<-ovun.sample(Tournament~., data = GKtrn, method = "over", N = nrow(GKtrn), seed = 122)$data
-GKunder<-ovun.sample(Tournament~., data = GKtrn, method = "under", N = nrow(GKtrn)*0.7, seed = 125)$data
-GKboth<-ovun.sample(Tournament~., data = GKtrn, method = "both", N = nrow(GKtrn), seed = 156)$data
+GKover<-ovun.sample(Tournament~., data = GKtrn, method = "over", N = 235, seed = 122)$data
+GKunder<-ovun.sample(Tournament~., data = GKtrn, method = "under", N = 7, seed = 189)$data
+GKboth<-ovun.sample(Tournament~., data = GKtrn, method = "both", N = nrow(Gk.20), seed = 156)$data
 table(GKover$Tournament) 
 table(GKunder$Tournament) 
 table(GKboth$Tournament)
-GKover<-GKover %>% select(1:66)
-GKunder<-GKunder %>% select(1:66)
-GKboth<-GKboth %>% select(1:66)
 #Tree Model
 #Oversampling
 GKdt.o.20<-rpart(formula = Tournament ~ ., data = GKover, method = "class")
@@ -842,7 +865,6 @@ GKtree_acc.b
 #Bagging
 library(randomForest)
 library(gbm)
-
 library(ISLR)
 library(Rcpp)
 #Tuning
@@ -851,8 +873,14 @@ oob<-trainControl(method = "oob")
 cv_5<-trainControl(method = "cv", number = 5)
 rf_grid =  expand.grid(mtry = 1:100)
 GKrf_tune <- train(as.factor(Tournament) ~ ., data = na.omit(GKboth), method = "rf", trControl = oob, verbose = FALSE, tuneGrid = rf_grid)
-GKgbm_tune <- train(Tournament ~ ., data = na.omit(GKboth),method = "gbm",trControl = cv_5, verbose = T, tuneGrid = gbm_grid)
-GK_bag<-randomForest(as.factor(Tournament)~., data = na.omit(GKboth), mtry = as.numeric(GKrf_tune$bestTune), importance = T, ntrees = 500)
+GK_bag<-randomForest(as.factor(Tournament)~., data = na.omit(GKboth), mtry = ncol(GKboth)-1, importance = T, ntrees = 5000)
+GK_rf<-randomForest(as.factor(Tournament)~., data = na.omit(GKboth), mtry = as.numeric(GKrf_tune$bestTune), importance = T, ntrees = 500)
+GK_rf
 GK_bag
 #Gradient Boosting Model
-GKboth$Tournament = as.numeric(ifelse(seat_trn_mod$Sales == "Low", "0", "1"))
+GK_boost<-gbm(ifelse(Tournament == "Yes", 1, 0)~., data = GKboth, distribution = "bernoulli", n.trees = 5000, interaction.depth = 4, shrinkage = 0.01)
+GK_boost
+GK_boost_pred<-ifelse(predict(GK_boost, GKtst, n.trees = 5000, "response")>0.5, "Yes", "No")
+table(predicted = GK_boost_pred, actual = GKtst$Tournament)
+GKboost_acc<- calc_acc(predicted = GK_boost_pred, actual = GKtst$Tournament)
+GKboost_acc
