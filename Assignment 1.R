@@ -96,8 +96,6 @@ FW_boost_pred<-ifelse(predict(FW_boost, FWtst, n.trees = 5000, "response")>0.5, 
 table(predicted = FW_boost_pred, actual = FWtst$Tournament)
 FWboost_acc<- calc_acc(predicted = FW_boost_pred, actual = FWtst$Tournament)
 FWboost_acc
-#Neural Networks
-
 
 #FWMF 2020
 FWMF.20<-dat.20 %>% filter(Pos == "FWMF") %>% select(8:72, Tournament, In.Out) %>% filter(In.Out == "Yes")
@@ -178,8 +176,6 @@ FWMF_boost_pred<-ifelse(predict(FWMF_boost, FWMFtst, n.trees = 5000, "response")
 table(predicted = FWMF_boost_pred, actual = FWMFtst$Tournament)
 FWMFboost_acc<- calc_acc(predicted = FWMF_boost_pred, actual = FWMFtst$Tournament)
 FWMFboost_acc
-#Neural Networks
-
 
 #FWDF 2020
 FWDF.20<-dat.20 %>% filter(Pos == "FWDF") %>% select(8:72, Tournament, In.Out) %>% filter(In.Out == "Yes")
@@ -247,7 +243,6 @@ FWDFtree_acc.b
 #Bagging
 library(randomForest)
 library(gbm)
-
 library(ISLR)
 library(Rcpp)
 #Tuning
@@ -265,9 +260,6 @@ FWDF_boost_pred<-ifelse(predict(FWDF_boost, FWDFtst, n.trees = 5000, "response")
 table(predicted = FWDF_boost_pred, actual = FWDFtst$Tournament)
 FWDFboost_acc<- calc_acc(predicted = FWDF_boost_pred, actual = FWDFtst$Tournament)
 FWDFboost_acc
-#Neural Networks
-
-
 
 #DFFW 2020
 DFFW.20<-dat.20 %>% filter(Pos == "DFFW") %>% select(8:72, Tournament, In.Out) %>% filter(In.Out == "Yes")
@@ -352,9 +344,6 @@ DFFW_boost_pred<-ifelse(predict(DFFW_boost, DFFWtst, n.trees = 5000, "response")
 table(predicted = DFFW_boost_pred, actual = DFFWtst$Tournament)
 DFFWboost_acc<- calc_acc(predicted = DFFW_boost_pred, actual = DFFWtst$Tournament)
 DFFWboost_acc
-#Neural Networks
-
-
 
 #DFMF 2020
 DFMF.20<-dat.20 %>% filter(Pos == "DFMF") %>% select(8:72, Tournament, In.Out) %>% filter(In.Out == "Yes")
