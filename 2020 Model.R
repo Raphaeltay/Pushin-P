@@ -883,4 +883,8 @@ GK_boost
 GK_boost_pred<-ifelse(predict(GK_boost, GKtst, n.trees = 5000, "response")>0.5, "Yes", "No")
 table(predicted = GK_boost_pred, actual = GKtst$Tournament)
 GKboost_acc<- calc_acc(predicted = GK_boost_pred, actual = GKtst$Tournament)
+<<<<<<< HEAD:2020 Model.R
 GKboost_acc
+=======
+GKboost_acc
+>>>>>>> 29033a05683867ebfcc8e5915c922a4cae3cca6d:Assignment 1.R
