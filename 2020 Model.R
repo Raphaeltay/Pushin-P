@@ -703,3 +703,7 @@ GKs<-dat.21 %>% filter(Nation == "Rarita") %>% filter(Pos == "GK")%>%  mutate("s
 GKs.names.21<-GKs %>% select(Player, selected) %>% filter(selected == "Yes") %>% select(Player)
 GKs.names.21
 
+DF.sel<-head(DFs.names.20, n = 7)
+MF.sel<-head(MFs.names.20, n = 6)
+FW.sel<-head(FWs.names.21)
+GK.sel<-GKs.names.21
