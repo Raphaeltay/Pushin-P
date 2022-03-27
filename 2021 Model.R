@@ -70,7 +70,7 @@ FWdt.b.21<-rpart(formula = Tournament ~ ., data = FWboth, method = "class")
 rpart.plot(FWdt.b.21)
 FW_tst_pred.b<-predict(FWdt.b.21, FWtst, type = "class")
 table(predicted = FW_tst_pred.b, actual = FWtst$Tournament)
-vip(FWdt.b.21, num_features = 90)
+vip(FWdt.b.21, num_features = 10)
 FWtree_acc.b<- calc_acc(predicted = FW_tst_pred.b, actual = FWtst$Tournament)
 FWtree_acc.b
 #Bagging
