@@ -71,7 +71,7 @@ FWdt.b.20<-rpart(formula = Tournament ~ ., data = FWboth, method = "class")
 rpart.plot(FWdt.b.20)
 FW_tst_pred.b<-predict(FWdt.b.20, FWtst, type = "class")
 table(predicted = FW_tst_pred.b, actual = FWtst$Tournament)
-vip(FWdt.b.20, num_features = 90)
+vip(FWdt.b.20, num_features = 10)
 FWtree_acc.b<- calc_acc(predicted = FW_tst_pred.b, actual = FWtst$Tournament)
 FWtree_acc.b
 #Bagging
@@ -87,11 +87,9 @@ rf_grid =  expand.grid(mtry = 1:100)
 FWrf_tune <- train(as.factor(Tournament) ~ ., data = na.omit(FWboth), method = "rf", trControl = oob, verbose = FALSE, tuneGrid = rf_grid)
 FW_bag<-randomForest(as.factor(Tournament)~., data = na.omit(FWboth), mtry = ncol(FWboth)-1, importance = T, ntrees = 500)
 FW_rf<-randomForest(as.factor(Tournament)~., data = na.omit(FWboth), mtry = as.numeric(FWrf_tune$bestTune), importance = T, ntrees = 500)
-FW_bag
-FW_rf
+
 #Gradient Boosting Model
-FW_boost<-gbm(ifelse(Tournament == "Yes", 1, 0)~., data = FWboth, distribution = "bernoulli", n.trees = 5000, interaction.depth = 4, shrinkage = 0.01)
-FW_boost
+FW_boost<-gbm(ifelse(Tournament == "Yes", 1, 0)~., data = FWboth, distribution = "bernoulli", n.trees = 500, interaction.depth = 4, shrinkage = 0.01)
 FW_boost_pred<-ifelse(predict(FW_boost, FWtst, n.trees = 5000, "response")>0.5, "Yes", "No")
 table(predicted = FW_boost_pred, actual = FWtst$Tournament)
 FWboost_acc<- calc_acc(predicted = FW_boost_pred, actual = FWtst$Tournament)
@@ -129,28 +127,13 @@ DFover<-DFover %>% select(1:66)
 DFunder<-DFunder %>% select(1:66)
 DFboth<-DFboth %>% select(1:66)
 #Tree Model
-#Oversampling
-DFdt.o.20<-rpart(formula = Tournament ~ ., data = DFover, method = "class")
-rpart.plot(DFdt.o.20)
-DF_tst_pred.o<-predict(DFdt.o.20, DFtst, type = "class")
-table(predicted = DF_tst_pred.o, actual = DFtst$Tournament)
-vip(DFdt.o.20, num_features = 90)
-DFtree_acc.o<- calc_acc(predicted = DF_tst_pred.o, actual = DFtst$Tournament)
-DFtree_acc.o
-#Undersampling
-DFdt.u.20<-rpart(formula = Tournament ~ ., data = DFunder, method = "class")
-rpart.plot(DFdt.u.20)
-DF_tst_pred.u<-predict(DFdt.u.20, DFtst, type = "class")
-table(predicted = DF_tst_pred.u, actual = DFtst$Tournament)
-vip(DFdt.u.20, num_features = 90)
-DFtree_acc.u<- calc_acc(predicted = DF_tst_pred.u, actual = DFtst$Tournament)
-DFtree_acc.u
+#Addressing data imbalance
 #Both
 DFdt.b.20<-rpart(formula = Tournament ~ ., data = DFboth, method = "class")
 rpart.plot(DFdt.b.20)
 DF_tst_pred.b<-predict(DFdt.b.20, DFtst, type = "class")
 table(predicted = DF_tst_pred.b, actual = DFtst$Tournament)
-vip(DFdt.b.20, num_features = 90)
+vip(DFdt.b.20, num_features = 10)
 DFtree_acc.b<- calc_acc(predicted = DF_tst_pred.b, actual = DFtst$Tournament)
 DFtree_acc.b
 #Bagging
@@ -161,9 +144,7 @@ cv_5<-trainControl(method = "cv", number = 5)
 rf_grid =  expand.grid(mtry = 1:100)
 DFrf_tune <- train(as.factor(Tournament) ~ ., data = na.omit(DFboth), method = "rf", trControl = oob, verbose = FALSE, tuneGrid = rf_grid)
 DF_bag<-randomForest(as.factor(Tournament)~., data = na.omit(DFboth), mtry = as.numeric(DFrf_tune$bestTune), importance = T, ntrees = 500)
-DF_bag
 DF_rf<-randomForest(as.factor(Tournament)~., data = na.omit(DFboth), mtry = as.numeric(DFrf_tune$bestTune), importance = T, ntrees = 500)
-DF_rf
 #Gradient Boosting Model
 DF_boost<-gbm(ifelse(Tournament == "Yes", 1, 0)~., data = DFboth, distribution = "bernoulli", n.trees = 5000, interaction.depth = 4, shrinkage = 0.01)
 DF_boost
@@ -197,38 +178,16 @@ MFtst<-MF.20[idx==2,]
 table(MFtrn$Tournament)
 #Balancing Data
 library(ROSE)
-MFover<-ovun.sample(Tournament~., data = MFtrn, method = "over", N = nrow(MFtrn), seed = 122)$data
-MFunder<-ovun.sample(Tournament~., data = MFtrn, method = "under", N = nrow(MFtrn)*0.7, seed = 125)$data
 MFboth<-ovun.sample(Tournament~., data = MFtrn, method = "both", N = nrow(MFtrn), seed = 156)$data
-table(MFover$Tournament) 
-table(MFunder$Tournament) 
 table(MFboth$Tournament)
-MFover<-MFover %>% select(1:66)
-MFunder<-MFunder %>% select(1:66)
 MFboth<-MFboth %>% select(1:66)
 #Tree Model
-#Oversampling
-MFdt.o.20<-rpart(formula = Tournament ~ ., data = MFover, method = "class")
-rpart.plot(MFdt.o.20)
-MF_tst_pred.o<-predict(MFdt.o.20, MFtst, type = "class")
-table(predicted = MF_tst_pred.o, actual = MFtst$Tournament)
-vip(MFdt.o.20, num_features = 90)
-MFtree_acc.o<- calc_acc(predicted = MF_tst_pred.o, actual = MFtst$Tournament)
-MFtree_acc.o
-#Undersampling
-MFdt.u.20<-rpart(formula = Tournament ~ ., data = MFunder, method = "class")
-rpart.plot(MFdt.u.20)
-MF_tst_pred.u<-predict(MFdt.u.20, MFtst, type = "class")
-table(predicted = MF_tst_pred.u, actual = MFtst$Tournament)
-vip(MFdt.u.20, num_features = 90)
-MFtree_acc.u<- calc_acc(predicted = MF_tst_pred.u, actual = MFtst$Tournament)
-MFtree_acc.u
 #Both
 MFdt.b.20<-rpart(formula = Tournament ~ ., data = MFboth, method = "class")
 rpart.plot(MFdt.b.20)
 MF_tst_pred.b<-predict(MFdt.b.20, MFtst, type = "class")
 table(predicted = MF_tst_pred.b, actual = MFtst$Tournament)
-vip(MFdt.b.20, num_features = 90)
+vip(MFdt.b.20, num_features = 10)
 MFtree_acc.b<- calc_acc(predicted = MF_tst_pred.b, actual = MFtst$Tournament)
 MFtree_acc.b
 #Bagging
@@ -283,7 +242,7 @@ GKdt.o.20<-rpart(formula = Tournament ~ ., data = GKover, method = "class")
 rpart.plot(GKdt.o.20)
 GK_tst_pred.o<-predict(GKdt.o.20, GKtst, type = "class")
 table(predicted = GK_tst_pred.o, actual = GKtst$Tournament)
-vip(GKdt.o.20, num_features = 90)
+vip(GKdt.o.20, num_features = 10)
 GKtree_acc.o<- calc_acc(predicted = GK_tst_pred.o, actual = GKtst$Tournament)
 GKtree_acc.o
 #Undersampling
@@ -703,3 +662,7 @@ GKs<-dat.21 %>% filter(Nation == "Rarita") %>% filter(Pos == "GK")%>%  mutate("s
 GKs.names.21<-GKs %>% select(Player, selected) %>% filter(selected == "Yes") %>% select(Player)
 GKs.names.21
 
+DF.sel<-head(DFs.names.20, n = 7)
+MF.sel<-head(MFs.names.20, n = 6)
+FW.sel<-head(FWs.names.21)
+GK.sel<-GKs.names.21
